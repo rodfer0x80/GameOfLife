@@ -1,7 +1,9 @@
 module Main where
 
-import Lib ( someFunc )
+import Lib ( someFunc, genBoard )
 
 
 main :: IO ()
-main = someFunc
+main = do
+    genBoard 10
+    return ()
