@@ -5,5 +5,5 @@ import Lib ( someFunc, genBoard )
 
 main :: IO ()
 main = do
-    genBoard 10
+    board <- genBoard 10
     return ()
