@@ -61,14 +61,14 @@ genBoard n
 
 
 displayBoard :: Show a => [a] -> IO ()
-displayBoard board = do
-    putStrLn ""
-    traverse putStr $ map (\x -> show x ++ " ") ( take a board )
-    if null board
-    then
+displayBoard board
+    | null board = putStrLn ""
+    | otherwise = do
         putStrLn ""
-    else
+        traverse putStr $ map (\x -> show x ++ " ") ( take a board )
         displayBoard (drop a board)
+
+
 
 {--
 tick :: Board -> IO ()
