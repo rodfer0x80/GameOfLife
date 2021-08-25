@@ -1,17 +1,14 @@
 module Lib
-    ( someFunc
-    , genBoard
+    ( genBoard
     , totalCells
-    , displayBoard
+    , tick
     ) where
 
 import System.Random ( randomRIO )
 import Control.Monad ( replicateM )
 import Data.List ( intersperse ) 
-import GHC.Show (Show)
-
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import Control.Concurrent (threadDelay)
+import Data.Foldable (traverse_)
 
 -- Clear the screen
 clearScreen :: IO ()
@@ -25,13 +22,8 @@ gameSleep n = sequence_ [return () | _ <- [1..n]]
 screenGoto :: (Int, Int) -> IO ()
 screenGoto (x,y) = putStr ("\ESC[" ++ show y ++ ";" ++ show x ++ "H")
 
-
-
--- Cell Position Point(x,y)
-type Point = (IO Int, IO Int)
-
 -- Cell Status
-data Cell = Dead | Alive
+data Cell = Dead | Alive deriving Eq
 
 instance Show Cell where 
     show Alive = "o"
@@ -63,21 +55,43 @@ displayBoard :: Show a => [a] -> IO ()
 displayBoard [] = putStrLn ""
 displayBoard board = do
                         putStrLn ""
-                        traverse putStr $ map (\x -> show x ++ " ") ( take a board )
+                        traverse_ (putStr . (\ x -> show x ++ " ")) (take a board)
                         displayBoard (drop a board)
 
-{--
-tick :: Board -> IO ()
-tick board = if not (isBoardEmpty board) then
-            do clearScreen
-               displayBoard formattedBoard
-               gameSleep 500000
-               tick (nextGen board)
+-- check for neighbours over each element of the list and create new 
+wipe :: [a] -> [Cell]
+wipe = map $ const Dead 
+
+
+-- tagBoard :: [b] -> [(Int, b)]
+-- tagBoard  = zip [0 .. totalCells]
+
+-- check neighbours calculates the number of Alive neightbours for each element of the board
+-- natural selection changes each element to a new state depending on number neighbours
+-- naturalSelection n
+--     | n > 3 = Dead
+--     | n < 2 = Dead
+--     | n 
+
+-- nextGen :: [Cell] -> [Cell]
+-- nextGen board = map naturalSelection (map checkNeighbours (tagBoard board)) board
+
+isEmptyBoard ::   [Cell] -> [Cell]
+isEmptyBoard = filter (== Alive)
+
+tick :: [Cell] -> IO ()
+tick board = do
+        screenGoto (1,1)
+        clearScreen
+        displayBoard board
+        threadDelay 1000000
+
+        if not $ null $ isEmptyBoard board
+        then
+            tick $ wipe board
          else
-            do clearScreen
+            do 
+               clearScreen
                screenGoto (1,1)
-               putStrLn "Game Over !"
---}
-
-
+               putStrLn "Game Over!"
 

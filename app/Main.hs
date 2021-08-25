@@ -1,11 +1,13 @@
 module Main where
 
-import Lib ( someFunc, genBoard, totalCells, displayBoard)
+import Lib (  genBoard
+            , totalCells
+            , tick
+            )
 
 
 main :: IO ()
 main = do
-    someFunc
     board <- genBoard totalCells
-    displayBoard board
+    tick board
     return ()
