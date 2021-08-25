@@ -59,16 +59,12 @@ genBoard :: Int -> IO [Cell]
 genBoard n
     = replicateM n genPair
 
-
 displayBoard :: Show a => [a] -> IO ()
-displayBoard board
-    | null board = putStrLn ""
-    | otherwise = do
-        putStrLn ""
-        traverse putStr $ map (\x -> show x ++ " ") ( take a board )
-        displayBoard (drop a board)
-
-
+displayBoard [] = putStrLn ""
+displayBoard board = do
+                        putStrLn ""
+                        traverse putStr $ map (\x -> show x ++ " ") ( take a board )
+                        displayBoard (drop a board)
 
 {--
 tick :: Board -> IO ()
