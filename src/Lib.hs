@@ -7,6 +7,7 @@ module Lib
 
 import System.Random ( randomRIO )
 import Control.Monad ( replicateM )
+import Data.List ( intersperse ) 
 import GHC.Show (Show)
 
 someFunc :: IO ()
@@ -21,8 +22,8 @@ gameSleep :: Int -> IO ()
 gameSleep n = sequence_ [return () | _ <- [1..n]]
 
 -- Moves to point (x,y) on screen
---screenGoto :: Point -> IO ()
---screenGoto (x,y) = putStr ("\ESC[" ++ show y ++ ";" ++ show x ++ "H")
+screenGoto :: (Int, Int) -> IO ()
+screenGoto (x,y) = putStr ("\ESC[" ++ show y ++ ";" ++ show x ++ "H")
 
 
 
@@ -59,20 +60,21 @@ genBoard n
     = replicateM n genPair
 
 
---formatBoard = -- for each  1 element in list intercalate with a space, for each 20(a) intercalate with a newline
--- then do displayBoard(formatBoard board)
--- so this takes a board and returns a board / list modified
-
--- take a elements and print to screen; then
-displayBoard :: Show b => [b] -> IO [()]
-displayBoard = traverse $ putStr . show
-
+displayBoard :: Show a => [a] -> IO ()
+displayBoard board = do
+    putStrLn ""
+    traverse putStr $ map (\x -> show x ++ " ") ( take a board )
+    if null board
+    then
+        putStrLn ""
+    else
+        displayBoard (drop a board)
 
 {--
 tick :: Board -> IO ()
 tick board = if not (isBoardEmpty board) then
             do clearScreen
-               displayBoard b
+               displayBoard formattedBoard
                gameSleep 500000
                tick (nextGen board)
          else
