@@ -4,8 +4,7 @@
 
 
 ````
-Run/Stop
+-- haskell cabal-install
 runhaskell hgol.hs
-CTRL+C
 ````
 <img src="game.jpg"></img>
