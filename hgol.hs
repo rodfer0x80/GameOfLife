@@ -63,6 +63,6 @@ main = do
   let x = 25
       y = 49
       r = 0.5
-      t = 200000 -- Pause for 400 milliseconds 
+      t = 1000000 -- Pause for 1 second (time t in milisseconds) 
   grid <- emptyGrid x y r
   simulate grid r t
